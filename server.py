@@ -27,7 +27,10 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding):
         encoding = "jpeg"
 
     # open image #
-    image = PIL.Image.open(os.path.join(PICTURE_DIR, pathToOrig))
+    try:
+        image = PIL.Image.open(os.path.join(PICTURE_DIR, pathToOrig))
+    except FileNotFoundError:
+        return None
 
     # ensure sizes are valid #
     x, y = image.size
@@ -74,6 +77,9 @@ def sendPicture(path):
         scaleX = round(float(x2))
     
     path = generatePicture(path, scaleX, scaleY, flask.request.args.get("encoding"))
+    if not path:
+        return ("File not found", 404)
+
     raw = flask.send_from_directory(".", path, cache_timeout=cache_timeout)
     response = flask.make_response(raw)
     response.headers['X-ATHQ-INTERNAL-FID'] = path

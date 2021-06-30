@@ -1,0 +1,29 @@
+<head>
+    <meta name="viewport"    content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Image factory providing automatically resized and re-encoded images.">
+    <meta name="author"      content="Yannik Schmidt">
+    <meta name="title"       content="Image Factory">
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Image Factory" />
+    <meta property="og:description" content="Image Factory developed by Yannik Schmidt" />
+    <meta property="og:url" content="/" />
+</head>
+<body>
+    <div class="dev-info">
+        Image Factory for internal use,
+        developed by <a href="https://potaris.de">Yannik Schmidt</a><br>
+        Availiable on 
+        <a href="https://github.com/FAUSheppy/python-flask-picture-factory">FAUSheppy GitHub</a>
+    </div>
+    <p>
+        Public Images List:
+    </p>
+    <div class="overview">
+        <p>
+        {% for path in paths %}
+            {{ path }}<br>
+        {% endfor %}
+        </p>
+    </div>
+</body>

@@ -90,14 +90,14 @@ def sendPicture(path):
 
 @app.route("/")
 def list():
-    retString = ".\n"
+    retStringArr = []
     print(PICTURE_DIR)
     for root, dirs, files in os.walk(PICTURE_DIR):
         path = root.split(os.sep)
         for f in files:
-            retString += os.path.join(os.path.basename(root), f) + "<br>\n"
+            retStringArr += [os.path.join(os.path.basename(root), f)]
 
-    return (retString, 200)
+    return flask.render_template("index.html", paths=retStringArr)
 
 
 if __name__ == "__main__":

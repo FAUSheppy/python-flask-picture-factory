@@ -56,6 +56,9 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding):
     return newPath.replace(PICTURE_DIR, "", REPLACE_ONCE)
 
 @app.route("/media/<path:path>")
+@app.route("/picture/<path:path>")
+@app.route("/image/<path:path>")
+@app.route("/images/<path:path>")
 def sendPicture(path):
     cache_timeout = 2592000
 

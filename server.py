@@ -88,6 +88,18 @@ def sendPicture(path):
     response.headers['X-ATHQ-INTERNAL-FID'] = path
     return response
 
+@app.route("/")
+def list():
+    retString = ".\n"
+    print(PICTURE_DIR)
+    for root, dirs, files in os.walk(PICTURE_DIR):
+        path = root.split(os.sep)
+        for f in files:
+            retString += os.path.join(os.path.basename(root), f) + "<br>\n"
+
+    return (retString, 200)
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Picture Factory',

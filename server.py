@@ -8,7 +8,7 @@ import PIL.Image
 app = flask.Flask("Picture factory app", static_folder=None)
 PICTURE_DIR = "pictures/"
 
-def generatePicture(pathToOrig, scaleX, scaleY, encoding):
+def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
     '''Generate an pictures with the requested scales and encoding if it doesn't already exist'''
 
     CACHE_DIR = os.path.join("cache/")
@@ -38,6 +38,7 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding):
         scaleY = y
     if not scaleX:
         scaleX = x
+
     scaleX = min(x, scaleX)
     scaleY = min(y, scaleY)
 
@@ -48,7 +49,14 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding):
     # save image with new size and encoding #
     if image.mode in ("RGBA", "P") and encoding in ("jpeg", "webp"):
         image = image.convert("RGB")
-    image.thumbnail((scaleX, scaleY), PIL.Image.ANTIALIAS)
+
+    if crop:
+        image.crop((0, 0, scaleX, scaleY))
+        print(scaleX, scaleY)
+    else:
+        print("scale")
+        image.thumbnail((scaleX, scaleY), PIL.Image.ANTIALIAS)
+
     image.save(newPath, encoding)
 
     # strip the STATIC_DIR because we will use send_from_directory for safety #
@@ -76,12 +84,14 @@ def sendPicture(path):
 
     if x1:
         scaleX = round(float(x1))
-    elif y1:
+    elif x2:
         scaleX = round(float(x2))
-    
-    path = generatePicture(path, scaleX, scaleY, flask.request.args.get("encoding"))
+   
+    pathDebug = path
+    path = generatePicture(path, scaleX, scaleY, flask.request.args.get("encoding"), 
+                            bool(flask.request.args.get("crop")))
     if not path:
-        return ("File not found", 404)
+        return ("File not found: {}".format(os.path.join(PICTURE_DIR, pathDebug)), 404)
 
     raw = flask.send_from_directory(".", path, cache_timeout=cache_timeout)
     response = flask.make_response(raw)

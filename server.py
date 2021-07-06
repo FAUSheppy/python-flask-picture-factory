@@ -99,9 +99,9 @@ def sendPicture(path):
     response.headers['X-ATHQ-INTERNAL-FID'] = path
 
     # check for a cacheTimeout #
-    cacheTimeout = request.args.get("cache-timeout")
+    cacheTimeout = flask.request.args.get("cache-timeout")
     if not cacheTimeout:
-        cacheTimeout = request.args.get("ct")
+        cacheTimeout = flask.request.args.get("ct")
     if cacheTimeout:
         response.headers['Cache-Control'] = "max-age=" + str(cacheTimeout)
 

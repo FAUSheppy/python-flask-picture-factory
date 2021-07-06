@@ -104,6 +104,8 @@ def sendPicture(path):
         cacheTimeout = flask.request.args.get("ct")
     if cacheTimeout:
         response.headers['Cache-Control'] = "max-age=" + str(cacheTimeout)
+    else:
+        response.headers['Cache-Control'] = "max-age=" + "3600"
 
     return response
 

@@ -95,7 +95,16 @@ def sendPicture(path):
 
     raw = flask.send_from_directory(".", path, cache_timeout=cache_timeout)
     response = flask.make_response(raw)
+    
     response.headers['X-ATHQ-INTERNAL-FID'] = path
+
+    # check for a cacheTimeout #
+    cacheTimeout = request.args.get("cache-timeout")
+    if not cacheTimeout:
+        cacheTimeout = request.args.get("ct")
+    if cacheTimeout:
+        response.headers['Cache-Control'] = "max-age=" + str(cacheTimeout)
+
     return response
 
 @app.route("/")

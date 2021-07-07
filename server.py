@@ -88,7 +88,8 @@ def sendPicture(path):
         scaleX = round(float(x2))
    
     pathDebug = path
-    path = generatePicture(path, scaleX, scaleY, flask.request.args.get("encoding"), 
+    encoding = flask.request.args.get("encoding")
+    path = generatePicture(path, scaleX, scaleY, encoding, 
                             bool(flask.request.args.get("crop")))
     if not path:
         return ("File not found: {}".format(os.path.join(PICTURE_DIR, pathDebug)), 404)
@@ -106,6 +107,9 @@ def sendPicture(path):
         response.headers['Cache-Control'] = "max-age=" + str(cacheTimeout)
     else:
         response.headers['Cache-Control'] = "max-age=" + "3600"
+
+    if encoding:
+        response.headers['Content-Type'] = "image/{}".format(encoding)
 
     return response
 

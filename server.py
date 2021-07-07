@@ -30,7 +30,7 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
     try:
         image = PIL.Image.open(os.path.join(PICTURE_DIR, pathToOrig))
     except FileNotFoundError:
-        return None
+        return (None, False)
 
     # ensure sizes are valid #
     x, y = image.size
@@ -45,6 +45,11 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
     # generate new paths #
     newFile = "x-{x}-y-{y}-{fname}.{ext}".format(x=scaleX, y=scaleY, fname=filename, ext=encoding)
     newPath = os.path.join(CACHE_DIR, newFile)
+
+    # check for cache
+    print(newPath)
+    if os.path.isfile(newPath):
+        return (newPath, True)
 
     # save image with new size and encoding #
     if image.mode in ("RGBA", "P") and encoding in ("jpeg", "webp"):
@@ -61,7 +66,7 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
 
     # strip the STATIC_DIR because we will use send_from_directory for safety #
     REPLACE_ONCE = 1
-    return newPath.replace(PICTURE_DIR, "", REPLACE_ONCE)
+    return (newPath.replace(PICTURE_DIR, "", REPLACE_ONCE), False)
 
 @app.route("/media/<path:path>")
 @app.route("/picture/<path:path>")
@@ -86,18 +91,19 @@ def sendPicture(path):
         scaleX = round(float(x1))
     elif x2:
         scaleX = round(float(x2))
-   
+
     pathDebug = path
     encoding = flask.request.args.get("encoding")
-    path = generatePicture(path, scaleX, scaleY, encoding, 
+    path, cacheHit = generatePicture(path, scaleX, scaleY, encoding,
                             bool(flask.request.args.get("crop")))
     if not path:
         return ("File not found: {}".format(os.path.join(PICTURE_DIR, pathDebug)), 404)
 
     raw = flask.send_from_directory(".", path, cache_timeout=cache_timeout)
     response = flask.make_response(raw)
-    
-    response.headers['X-ATHQ-INTERNAL-FID'] = path
+
+    response.headers['X-PICTURE-FACTORY-INTERNAL-FID'] = path
+    response.headers['X-PICTURE-FACTORY-INTERNAL-CACHE-HIT'] = cacheHit
 
     # check for a cacheTimeout #
     cacheTimeout = flask.request.args.get("cache-timeout")

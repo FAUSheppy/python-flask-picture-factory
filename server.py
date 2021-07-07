@@ -52,7 +52,7 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
         return (newPath, True)
 
     # save image with new size and encoding #
-    if image.mode in ("RGBA", "P") and encoding in ("jpeg", "webp"):
+    if image.mode in ("RGBA", "P") and encoding in ("jpeg"):
         image = image.convert("RGB")
 
     if crop:

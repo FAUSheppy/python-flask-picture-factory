@@ -122,7 +122,6 @@ def sendPicture(path):
 @app.route("/")
 def list():
     retStringArr = []
-    print(PICTURE_DIR)
     for root, dirs, files in os.walk(PICTURE_DIR):
         path = root.split(os.sep)
         for f in files:

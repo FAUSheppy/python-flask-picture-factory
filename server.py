@@ -4,6 +4,7 @@ import flask
 import argparse
 import sys
 import PIL.Image
+import werkzeug.utils
 
 app = flask.Flask("Picture factory app", static_folder=None)
 PICTURE_DIR = "pictures/"
@@ -129,6 +130,26 @@ def list():
 
     return flask.render_template("index.html", paths=retStringArr)
 
+@app.route("/upload", methods = ['GET', 'POST'])
+def upload():
+    if not app.config['UPLOAD_ENABLED']:
+        return ("Upload Disabled", 403)
+    if flask.request.method == 'POST':
+        f = flask.request.files['file']
+        sfName = os.path.join(PICTURE_DIR, werkzeug.utils.secure_filename(f.filename))
+        if not os.path.isfile(sfName):
+            f.save(sfName)
+            return ('Success', 204)
+        else:
+            return ('Conflicting File', 409)
+    else:
+        return flask.render_template("upload.html")
+
+@app.before_first_request
+def init():
+    app.config['MAX_CONTENT_PATH'] = 32+1000*1000
+    app.config['UPLOAD_FOLDER']    = PICTURE_DIR
+    app.config['UPLOAD_ENABLED']   = os.path.isfile("./upload.enable")
 
 if __name__ == "__main__":
 

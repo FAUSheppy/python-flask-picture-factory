@@ -34,5 +34,20 @@ In addition to *encoding*, *scaleX* and *scaleY* you may also use the following 
 # Uploading
 This tool is not intended for uploading or large amounts of files, use SFTP/FTPS or whatever your server provides for. For pure convenience usage there is a */upload*/-location. It must be enabled by creating a file called *upload.enable* in the project root before the server is started.
 
+# With nginx as reverse-proxy
+
+    server {
+        listen 443 ssl;
+
+        location /{
+            proxy_pass http://localhost:5000;
+        }
+        location /upload{
+            auth_basic "Auth Message";
+            auth_basic_user_file "/path/to/auth/file";
+            proxy_pass http://localhost:5000;
+        }
+    }
+
 # Further explanation
 I wrote a small article with some more example on how to best use this to optimize your website -if you want to use it for that: [Medium](https://medium.com/anti-clickbait-coalition/responsive-image-factory-f1ed6e61d13c)

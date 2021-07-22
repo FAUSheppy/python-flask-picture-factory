@@ -38,13 +38,13 @@ This tool is not intended for uploading or large amounts of files, use SFTP/FTPS
 
     server {
         listen 443 ssl;
-
         location /{
             proxy_pass http://localhost:5000;
         }
         location /upload{
             auth_basic "Auth Message";
             auth_basic_user_file "/path/to/auth/file";
+            client_max_body_size 50m; # <-- important!
             proxy_pass http://localhost:5000;
         }
     }

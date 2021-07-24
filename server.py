@@ -142,7 +142,7 @@ def upload():
             f.save(sfName)
             realHostname = flask.request.headers.get("X-REAL-HOSTNAME")
             if realHostname:
-                return flask.redirect(realHostname + "/media/" + fname)
+                return flask.redirect("/media/" + fname)
             else:
                 return ('Success', 204)
         else:

@@ -136,10 +136,15 @@ def upload():
         return ("Upload Disabled", 403)
     if flask.request.method == 'POST':
         f = flask.request.files['file']
-        sfName = os.path.join(PICTURE_DIR, werkzeug.utils.secure_filename(f.filename))
+        fname = werkzeug.utils.secure_filename(f.filename)
+        sfName = os.path.join(PICTURE_DIR, fname)
         if not os.path.isfile(sfName):
             f.save(sfName)
-            return ('Success', 204)
+            realHostname = flask.request.headers.get("X-REAL-HOSTNAME")
+            if realHostname:
+                return flask.redirect(realHostname + "/media/" + fname)
+            else:
+                return ('Success', 204)
         else:
             return ('Conflicting File', 409)
     else:

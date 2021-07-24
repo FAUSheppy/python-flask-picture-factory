@@ -34,6 +34,8 @@ In addition to *encoding*, *scaleX* and *scaleY* you may also use the following 
 # Uploading
 This tool is not intended for uploading or large amounts of files, use SFTP/FTPS or whatever your server provides for. For pure convenience usage there is a */upload*/-location. It must be enabled by creating a file called *upload.enable* in the project root before the server is started.
 
+For automatic redirection after upload you must have a reverse proxy setting a header *X-REAL-HOSTNAME* with the internet facing hostname of the server.
+
 # With nginx as reverse-proxy
 
     server {
@@ -41,10 +43,12 @@ This tool is not intended for uploading or large amounts of files, use SFTP/FTPS
         location /{
             proxy_pass http://localhost:5000;
         }
+
         location /upload{
             auth_basic "Auth Message";
             auth_basic_user_file "/path/to/auth/file";
             client_max_body_size 50m; # <-- important!
+            proxy_set_header X-REAL-HOSTNAME $host;
             proxy_pass http://localhost:5000;
         }
     }

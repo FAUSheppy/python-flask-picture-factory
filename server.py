@@ -70,7 +70,9 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
     return (newPath.replace(PICTURE_DIR, "", REPLACE_ONCE), False)
 
 @app.route("/media/<path:path>")
+@app.route("/m/<path:path>")
 @app.route("/picture/<path:path>")
+@app.route("/pictures/<path:path>")
 @app.route("/image/<path:path>")
 @app.route("/images/<path:path>")
 def sendPicture(path):

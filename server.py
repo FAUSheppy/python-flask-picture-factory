@@ -96,6 +96,9 @@ def sendPicture(path):
         scaleX = round(float(x2))
 
     pathDebug = path
+    if path.endswith(".svg")
+        return flask.send_from_directory(".", path)
+
     encoding = flask.request.args.get("encoding")
     path, cacheHit = generatePicture(path, scaleX, scaleY, encoding,
                             bool(flask.request.args.get("crop")))

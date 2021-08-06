@@ -96,7 +96,7 @@ def sendPicture(path):
         scaleX = round(float(x2))
 
     pathDebug = path
-    if path.endswith(".svg")
+    if path.endswith(".svg"):
         return flask.send_from_directory(".", path)
 
     encoding = flask.request.args.get("encoding")

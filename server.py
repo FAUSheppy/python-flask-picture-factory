@@ -89,7 +89,7 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
 @app.route("/image/<path:path>")
 @app.route("/images/<path:path>")
 def sendPicture(path):
-    cache_timeout = 2592000
+    max_age = 2592000
 
     y1 = flask.request.args.get("scaley")
     x1 = flask.request.args.get("scalex")
@@ -118,7 +118,7 @@ def sendPicture(path):
     if not path:
         return ("File not found: {}".format(os.path.join(PICTURE_DIR, pathDebug)), 404)
 
-    raw = flask.send_from_directory(".", path, cache_timeout=cache_timeout)
+    raw = flask.send_from_directory(".", path, max_age=max_age)
     response = flask.make_response(raw)
 
     response.headers['X-PICTURE-FACTORY-INTERNAL-FID'] = path

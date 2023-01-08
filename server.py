@@ -5,8 +5,21 @@ import argparse
 import sys
 import PIL.Image
 import werkzeug.utils
+import flask_oidc
+import json
 
 app = flask.Flask("Picture factory app", static_folder=None)
+
+## OIDC CONFIG SETUP ##
+if os.path.isfile("oidc.json"):
+    with open("oidc.json") as f:
+        app.config |= json.load(f)
+    if not os.path.isfile("client_secrets.json"):
+        raise ValueError("client_secrets.json file is missing in project root")
+else:
+    raise ValueError("OIDC required by environment but not oidc.json file found")
+
+oidc = flask_oidc.OpenIDConnect(app)
 PICTURE_DIR = "pictures/"
 
 def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
@@ -136,6 +149,7 @@ def list():
     return flask.render_template("index.html", paths=retStringArr)
 
 @app.route("/upload", methods = ['GET', 'POST'])
+@oidc.require_login
 def upload():
     if not app.config['UPLOAD_ENABLED']:
         return ("Upload Disabled", 403)
@@ -160,6 +174,7 @@ def init():
     app.config['MAX_CONTENT_PATH'] = 32+1000*1000
     app.config['UPLOAD_FOLDER']    = PICTURE_DIR
     app.config['UPLOAD_ENABLED']   = os.path.isfile("./upload.enable")
+    
 
 if __name__ == "__main__":
 

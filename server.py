@@ -14,7 +14,7 @@ app = flask.Flask("Picture factory app", static_folder=None)
 if os.path.isfile("oidc.json"):
     with open("oidc.json") as f:
         app.config |= json.load(f)
-    if not os.path.isfile("client_secrets.json"):
+    if not os.path.isfile(app.config["OIDC_CLIENT_SECRETS"]):
         raise ValueError("client_secrets.json file is missing in project root")
 else:
     raise ValueError("OIDC required by environment but not oidc.json file found")

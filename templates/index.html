@@ -22,7 +22,11 @@
     <div class="overview">
         <p>
         {% for path in paths %}
-            {{ path }}<br>
+        {% if not "cache" in path %}
+        <a href="/m/{{ path }}">
+            <img alt="{{ path }}" src="/m/{{ path }}?encoding=webp&x=250" class="float: right"></img>
+        </a>
+        {% endif %}
         {% endfor %}
         </p>
     </div>

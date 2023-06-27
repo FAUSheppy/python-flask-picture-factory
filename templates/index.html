@@ -24,7 +24,9 @@
         {% for path in paths %}
         {% if not "cache" in path %}
         <a href="/m/{{ path }}">
-            <img alt="{{ path }}" src="/m/{{ path }}?encoding=webp&x=250" class="float: right"></img>
+            <img alt="{{ path }}" src="/m/{{ path }}?encoding=webp&x=250"
+                 style="max-width: 250px; max-heigh: 250px; overflow: hidden; background: red;">
+            </img>
         </a>
         {% endif %}
         {% endfor %}

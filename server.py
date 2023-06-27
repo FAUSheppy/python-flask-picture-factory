@@ -37,6 +37,8 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
         image = PIL.Image.open(os.path.join(PICTURE_DIR, pathToOrig))
     except FileNotFoundError:
         return (None, False)
+    except PIL.UnidentifiedImageError:
+        return (os.path.join(PICTURE_DIR, pathToOrig), False)
 
     # ensure sizes are valid #
     x, y = image.size

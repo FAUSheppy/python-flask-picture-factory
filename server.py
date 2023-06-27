@@ -142,7 +142,7 @@ def list():
 
     isPictureDict = dict()
     for p in retStringArr:
-        isPicture = any([x in p for x in ["jpg", "png", "wep", "svg"]])
+        isPicture = any([x in p.lower() for x in ["jpg", "png", "wep", "svg", "gif", "jpeg"]])
         isPictureDict.update({ p : isPicture })
 
     return flask.render_template("index.html", paths=retStringArr, isPictureDict=isPictureDict)

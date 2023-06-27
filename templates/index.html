@@ -20,16 +20,28 @@
         Public Images List:
     </p>
     <div class="overview">
-        <p>
         {% for path in paths %}
         {% if not "cache" in path %}
-        <a href="/m/{{ path }}">
+        {% if isPictureDict[path] %}
+        <a href="/m/{{ path }}" style="display: inline-block; float: left; margin: 5px;">
             <img alt="{{ path }}" src="/m/{{ path }}?encoding=webp&x=250"
                  style="max-width: 250px; max-heigh: 250px; overflow: hidden; background: red;">
             </img>
         </a>
+        {% else %}
+        <a href="/m/{{ path }}" style="display: inline-block; float: left; magin: 5px;
+                                       word-break: break-all;">
+            <div style="height: 150px; width: 250px; background: aliceblue;">
+                    <p style="font-size: 40px; position: fixed; margin-left: 80px;
+                              margin-top: 20px;">&#10060;</p>
+                    <br>
+                    <p style="margin-top: 80px; padding-left: 20px; padding-right: 20px">
+                        {{ path }}
+                    </p>
+            </div>
+        </a>
+        {% endif %}
         {% endif %}
         {% endfor %}
-        </p>
     </div>
 </body>

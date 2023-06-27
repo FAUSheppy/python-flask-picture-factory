@@ -140,7 +140,12 @@ def list():
         for f in files:
             retStringArr += [os.path.join(os.path.basename(root), f)]
 
-    return flask.render_template("index.html", paths=retStringArr)
+    isPictureDict = dict()
+    for p in retStringArr:
+        isPicture = any([x in p for x in ["jpg", "png", "wep", "svg"]])
+        isPictureDict.update({ p : isPicture })
+
+    return flask.render_template("index.html", paths=retStringArr, isPictureDict=isPictureDict)
 
 @app.route("/upload", methods = ['GET', 'POST'])
 def upload():

@@ -104,7 +104,7 @@ def sendPicture(path):
 
     pathDebug = path
     if path.endswith(".svg"):
-        return flask.send_from_directory(".", path)
+        return flask.send_from_directory(PICTURE_DIR, path)
 
     encoding = flask.request.args.get("encoding")
     path, cacheHit = generatePicture(path, scaleX, scaleY, encoding,

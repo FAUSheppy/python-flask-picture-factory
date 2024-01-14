@@ -141,7 +141,8 @@ def list():
     for root, dirs, files in os.walk(PICTURE_DIR):
         path = root.split(os.sep)
         for f in files:
-            retStringArr += [os.path.join(os.path.basename(root), f)]
+            tmp = [os.path.join(os.path.basename(root), f).replace(PICTURE_DIR, "", 1)]
+            retStringArr += tmp
 
     isPictureDict = dict()
     for p in retStringArr:

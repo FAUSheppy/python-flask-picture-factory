@@ -8,11 +8,14 @@ import werkzeug.utils
 import json
 
 app = flask.Flask("Picture factory app", static_folder=None)
-PICTURE_DIR = "pictures/"
 
 app.config['MAX_CONTENT_PATH'] = 32+1000*1000
-app.config['UPLOAD_FOLDER']    = PICTURE_DIR
-app.config['UPLOAD_ENABLED']   = os.path.isfile("./upload.enable")
+
+PICTURE_DIR = os.environ.get("PICTURES_DIRECTORY") or "pictures/"
+app.config['UPLOAD_FOLDER'] = PICTURE_DIR
+
+ENV_UPLOAD_ENABLED = os.environ.get("UPLOAD_ENABLED").lower() in ["yes", "true", "1"]
+app.config['UPLOAD_ENABLED'] = os.path.isfile("./upload.enable") or 
 
 def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
     '''Generate an pictures with the requested scales and encoding if it doesn't already exist'''
@@ -166,6 +169,9 @@ def upload():
             return ('Conflicting File', 409)
     else:
         return flask.render_template("upload.html")
+
+def create_app():
+    pass
 
 if __name__ == "__main__":
 

@@ -53,5 +53,20 @@ For automatic redirection after upload you must have a reverse proxy setting a h
         }
     }
 
+# With Docker-Compose
+
+    version: '3'
+    services:
+        image-factory:
+        image: atlantis-image-factory
+        restart: always
+        ports:
+            - "5000:5000"
+        environment:
+            UPLOAD_ENABLED: yes
+            PICTURES_DIRECTORY: picture
+        volumes:
+            - "/data/image-factory/pictures/:/app/pictures/"
+
 # Further explanation
 I wrote a small article with some more example on how to best use this to optimize your website -if you want to use it for that: [Medium](https://medium.com/anti-clickbait-coalition/responsive-image-factory-f1ed6e61d13c)

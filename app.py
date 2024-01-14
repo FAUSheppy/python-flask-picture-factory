@@ -1,4 +1,6 @@
-import server as moduleContainingApp
+import server as main
 
 def createApp(envivorment=None, start_response=None):
-    return moduleContainingApp.app
+    with main.app.app_context():
+        main.create_app()
+    return main.app

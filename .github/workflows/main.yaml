@@ -29,4 +29,4 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: "${{ secrets.REGISTRY }}/picture-factory:latest"
+          tags: "${{ secrets.REGISTRY }}/atlantishq/atlantis-image-factory:latest"

@@ -15,7 +15,7 @@ PICTURE_DIR = os.environ.get("PICTURES_DIRECTORY") or "pictures/"
 app.config['UPLOAD_FOLDER'] = PICTURE_DIR
 
 ENV_UPLOAD_ENABLED = os.environ.get("UPLOAD_ENABLED").lower() in ["yes", "true", "1"]
-app.config['UPLOAD_ENABLED'] = os.path.isfile("./upload.enable") or 
+app.config['UPLOAD_ENABLED'] = os.path.isfile("./upload.enable") or ENV_UPLOAD_ENABLED
 
 def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
     '''Generate an pictures with the requested scales and encoding if it doesn't already exist'''
@@ -71,7 +71,7 @@ def generatePicture(pathToOrig, scaleX, scaleY, encoding, crop):
         print(scaleX, scaleY)
     else:
         print("scale")
-        image.thumbnail((scaleX, scaleY), PIL.Image.ANTIALIAS)
+        image.thumbnail((scaleX, scaleY), PIL.Image.LANCZOS)
 
     image.save(newPath, encoding)
 
